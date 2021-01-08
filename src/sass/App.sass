@@ -1,0 +1,71 @@
+@import "nullstyle.scss", "media/index.sass", "caption.sass", "flex.sass", "columns.sass"
+
+$space-1: 4px
+$space-2: 10px
+$space-3: 16px
+$space-4: 20px
+$space-5: 28px
+$space-6: 44px
+
+body
+    font-family: 'Share Tech Mono', monospace
+
+.App
+    pisition: relative
+    background: #c2c2d6
+    overflow-x: hidden
+    height: 100vh
+    width: 100vw
+    display: flex
+    justify-content: center
+    align-items: center
+
+.calculator
+    width: 318px
+    background: black
+    padding: 4px
+    border: 2px solid #4d4d4d
+
+//-------------------screen-----------------
+.screen
+    padding: 4px
+    &__
+        &formula
+            min-height: 24px
+            padding: 4px
+            word-wrap: break-word
+        &output
+            height: 24px
+            padding: 4px
+
+//--------------------keys-----------------
+
+.keyBoard
+    display: grid
+    grid-template-columns: repeat(4, 1fr)
+    grid-template-rows: repeat(5, 1fr)
+    grid-gap: 1px
+    height: 300px
+
+.key
+    background: #4d4d4d
+    &:nth-child(1)
+        grid-area: 1 / 1 / 2 / 3
+        background: rgb(172, 57, 57)
+    &:nth-child(2)
+        background: #747474
+    &:nth-child(3)
+        background: #747474
+    &:nth-child(7)
+        background: #747474
+    &:nth-child(11)
+        background: #747474
+    &:nth-child(15)
+        grid-area: 4 / 4 / 6 / 5
+        background: rgb(0, 68, 102)
+    &:nth-child(16)
+        grid-area: 5 / 1 / 6 / 3
+    &:hover
+        outline: 1px solid grey
+        span
+            color: black
