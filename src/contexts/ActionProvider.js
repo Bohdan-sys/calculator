@@ -26,7 +26,6 @@ export const ActionContextProvider = ({ children }) => {
         return arr.flat().slice(0, -1).filter(Boolean)
     }
 
-    console.log(arr)
 
     const addCount = (value) => {
 
@@ -74,9 +73,10 @@ export const ActionContextProvider = ({ children }) => {
             setArr([...formattedArray(arr), value])
         }
         if (arr.includes('=') && /[X/+-]/.test(value)) {
-            setArr([...formattedCount(count), value.replace(/X/, '*')])
+            setArr([formattedCount(count), value.replace(/X/, '*')])
+
         }
-        if (arr.includes('=') && /^[-0-9]/.test(value)) {
+        if (arr.includes('=') && /^[0-9]/.test(value)) {
             setArr([])
             setCount(value)
         }
@@ -89,7 +89,7 @@ export const ActionContextProvider = ({ children }) => {
             setArr([])
         }
     }
-
+    console.log(arr)
     useEffect(() => {
         if (arr[arr.length - 1] === '=') {
             setCount(countExpression(formattedArray(arr)))
