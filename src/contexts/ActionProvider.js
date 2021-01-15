@@ -13,6 +13,11 @@ export const ActionContextProvider = ({ children }) => {
 
     const [count, setCount] = useState('0')
 
+    const [digit, setDigit] = useState('')
+
+    const [operator, setOperator] = useState()
+
+
     const limitter = () => {
         setCount('Digit Limit Met')
         setTimeout(() => setCount(answer), 1000)
@@ -26,9 +31,10 @@ export const ActionContextProvider = ({ children }) => {
         return arr.flat().slice(0, -1).filter(Boolean)
     }
 
-
     const addCount = (value) => {
-
+        count.length > 17 && limitter();
+        setOperator('')
+        setDigit('')
         if (/^[-0-9.]/.test(value) && count.length <= 17 && !(/[a-zA-Z]/.test(count))) {
             setAnswer(count.substring(0, 18))
 
@@ -56,15 +62,22 @@ export const ActionContextProvider = ({ children }) => {
                 setCount(count + '0' + value)
             }
         }
-
+        if (count === '-' && /[X/+-]/.test(value)) {
+            setArr([...formattedArray(arr), value.replace(/X/, '*')])
+            setCount('')
+            setOperator(value.replace(/X/, '*'))
+        }
         if (count.length !== 0 && /[X/+-]/.test(value)) {
             count !== '-' && setArr([...arr, formattedCount(count), value.replace(/X/, '*')])
+            count !== '-' && setOperator(value.replace(/X/, '*'))
             setCount('')
         }
         if (count.length === 0 && /[X/+]$/.test(value)) {
             setArr([...formattedArray(arr), value.replace(/X/, '*')])
             setCount('')
+            setOperator(value.replace(/X/, '*'))
         }
+
         if (value === '=' && !(arr.includes(value))) {
             setArr([...arr, formattedCount(count), value])
             setCount('')
@@ -87,24 +100,29 @@ export const ActionContextProvider = ({ children }) => {
         if (value === 'AC') {
             setCount('0')
             setArr([])
+            setDigit('')
         }
     }
-    console.log(arr)
+    if (arr[arr.length - 1] === '=') {
+        setCount(countExpression(formattedArray(arr)))
+        setArr([...arr, countExpression(formattedArray(arr))])
+    }
     useEffect(() => {
-        if (arr[arr.length - 1] === '=') {
-            setCount(countExpression(formattedArray(arr)))
-            setArr([...arr, countExpression(formattedArray(arr))])
+        if (operator || arr.includes('=')) {
+            setDigit(arr.join(''))
+        } else {
+            setDigit(arr.join('') + count)
         }
-        count.length > 17 && limitter();
-
-    }, [arr, count])
+    }, [count, arr])
 
     return (
         <ActionContext.Provider value={{
             button,
             count,
             addCount: addCount,
-            arr
+            arr,
+            operator,
+            digit
         }}>
             {children}
         </ActionContext.Provider>
